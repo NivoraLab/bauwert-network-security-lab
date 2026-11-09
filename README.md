@@ -1,178 +1,123 @@
 # BauWert – Network Security Lab
 
-**Cisco Packet Tracer | Network Security | Cybersecurity | System Hardening**
+**Network Security | Cisco Packet Tracer | Python | PowerShell | Linux**
 
-**Final Grade: 6.0 / 6.0 (Highest Swiss Grade)**
+**Final Grade: 6.0 / 6.0 – Highest Swiss Grade**
+
+A hands-on cybersecurity project focused on securing the network infrastructure of a fictional construction company against ransomware, unauthorized access, and lateral movement.
+
+Completed as a two-person team project during the Swiss vocational training programme in Computer Science (Platform Development).
+
+## Network Architecture
+
+![BauWert Network Topology](topology/bauwert-final-lab-topology.png)
+
+The network simulation includes a Cisco ASA firewall, routers, switches, internal servers, a DMZ, wireless networks, a VPN gateway, and a central logging server.
+
+The architecture was designed around network segmentation, restricted access between security zones, and the principle of least privilege.
 
 ## Project Overview
 
-This project focuses on analysing, designing, implementing, and evaluating the network security infrastructure of BauWert GmbH, a fictional Swiss construction company.
+The project was based on a ransomware scenario called **Blackout**.
 
-The project was based on a ransomware attack scenario called **"Blackout"**, involving compromised user credentials, lateral movement, data exfiltration, and the encryption of critical company systems.
+The simulated attack involved compromised credentials, unauthorized network access, data exfiltration, and the encryption of business-critical systems.
 
-Our objective was to identify security vulnerabilities, assess potential risks, implement appropriate security controls, and verify their effectiveness through practical testing.
+Our objective was to analyse the existing infrastructure, identify vulnerabilities, design security measures, implement selected controls, and validate the results.
 
-The project was completed by a two-person team as part of the Swiss **ICT Specialist EFZ (Platform Development)** vocational training programme.
+### Technologies & Tools
 
-**Final Project Grade: 6.0 / 6.0**
-
-## Technologies & Tools
-
-| Technology | Purpose |
+| Technology | Application |
 |---|---|
-| Cisco Packet Tracer | Network simulation and security testing |
-| Cisco ASA Firewall | Firewall configuration and access control |
-| Cisco ISR Routers | Network routing and VPN configuration |
-| VLANs | Network segmentation |
-| DMZ | Isolation of selected network services |
+| Cisco Packet Tracer | Network simulation and testing |
+| Cisco ASA & ISR Routers | Firewall, routing and VPN configuration |
+| VLANs & DMZ | Network segmentation |
 | IPsec VPN | Secure remote access |
-| Access Control Lists (ACLs) | Traffic filtering and access restrictions |
+| ACLs | Traffic filtering |
 | Ubuntu Server | Linux system hardening |
-| Windows | Endpoint security and account policies |
-| Syslog | Security event logging and monitoring |
+| Windows | Endpoint security |
+| Python | Syslog reception and alert monitoring |
+| PowerShell | Security log analysis |
 | VMware Workstation | Virtualized test environment |
 
-## Project Objectives
+## Implementation
 
-The main objectives were to:
+The project covered nine competency areas, from A1 to F1.
 
-- Analyse the existing network infrastructure and identify vulnerabilities.
-- Evaluate and prioritize cybersecurity risks.
-- Design a secure network architecture using segmentation and security zones.
-- Implement firewall rules and restricted remote access.
-- Apply system-hardening measures to Linux and Windows environments.
-- Perform security tests and document the results.
-- Analyse security logs and monitor network activity.
-- Troubleshoot connectivity issues using a structured methodology.
-
-## Project Implementation
-
-The project covered nine competency areas.
-
-| Area | Description |
+| Phase | Focus |
 |---|---|
-| A1 | Analyse the existing IT infrastructure |
-| A2 | Identify vulnerabilities and assess risks |
-| B1 | Design a secure network architecture |
-| B2 | Develop security concepts for VPN, remote access, and intrusion detection |
-| C1 | Configure network security components |
-| C2 | Harden Linux and Windows systems |
-| D1 | Perform and document security tests |
-| E1 | Monitor and analyse security-related events |
-| F1 | Troubleshoot and resolve network connectivity issues |
+| A1–A2 | Infrastructure analysis and risk assessment |
+| B1–B2 | Network architecture and security design |
+| C1–C2 | Security implementation and system hardening |
+| D1 | Security testing and validation |
+| E1 | Monitoring and log analysis |
+| F1 | Network troubleshooting and fault resolution |
 
-## Network Security Architecture
+## Security Monitoring
 
-We designed a segmented network architecture to reduce the risk of unauthorized access and lateral movement.
+We developed Python and PowerShell scripts for collecting and analysing Syslog messages.
 
-Key security measures included:
+The monitoring implementation focuses on detecting repeated network interface failures and evaluating event sequences.
 
-- Separation of network segments using VLANs
-- DMZ architecture for selected services
-- Firewall access control policies
-- Restricted VPN access for remote users
-- Separation of client and server networks
-- Centralized security event logging
-- Application of the principle of least privilege
+![Syslog Alert Detection](monitoring/monitoring-alert-detected.png)
 
-The architecture was designed to limit unnecessary communication between security zones while maintaining access to authorized services.
+The repository includes example monitoring scripts and sample event data in the [`monitoring/`](monitoring/) directory.
 
-## Security Testing & Validation
+## VPN Troubleshooting
 
-We tested the implemented security controls using connectivity tests, configuration checks, and packet-level analysis.
+One of the most challenging tasks was investigating an IPsec VPN connectivity issue.
 
-The tests focused on verifying whether legitimate traffic was permitted and unauthorized connections were restricted.
+**Problem:** The VPN tunnel was established during the original project tests, but HTTPS communication with the internal server initially failed.
 
-Cisco Packet Tracer's simulation mode helped us investigate packet flows and evaluate network behaviour.
-
-### Troubleshooting Case: VPN Connectivity Failure
-
-One of the most challenging tasks involved troubleshooting an IPsec VPN connection.
-
-**Problem:**
-
-The VPN tunnel was successfully established, but the remote client could not access the internal server (Server0) over HTTPS.
-
-**Investigation:**
-
-We analysed several components:
+We investigated the issue using:
 
 - Firewall ACL hit counters
-- IPsec encryption and decryption counters
+- IPsec packet counters
 - Routing tables
-- ARP behaviour
-- Packet flows in Cisco Packet Tracer
+- ARP analysis
+- Cisco Packet Tracer simulation mode
 
-**Resolution:**
+### Packet Flow Analysis
 
-The investigation revealed a problem with the return path of network packets, involving the ASA's ARP behaviour.
+![VPN Packet Flow](topology/vpn-zone-packet-path.png)
 
-We resolved the connectivity issue by introducing a dedicated VPN network zone without weakening the existing firewall security policies.
+The investigation identified an issue involving the return path of VPN traffic and the ASA's ARP behaviour.
 
-**Key Learning:**
+A dedicated VPN zone was introduced to resolve the issue without unnecessarily relaxing firewall security policies.
 
-A successful VPN connection does not automatically guarantee end-to-end connectivity. Routing, ARP resolution, firewall rules, and return traffic must all be evaluated.
+### Original HTTPS Test Evidence
 
-## System Hardening
+![HTTPS Connectivity Test](topology/vpn-https-success.png)
 
-We examined and applied security-hardening measures in Linux and Windows environments.
+The screenshot documents the successful HTTPS test recorded during the original F1 project work.
 
-The work included:
+**Verification note:** A later attempt to reconnect using the archived Packet Tracer file timed out during VPN negotiation. The original test evidence is therefore presented as a historical project result, not as a newly reproduced test.
 
-- Reviewing user privileges and account security
-- Securing SSH configurations
-- Restricting unnecessary network services
-- Reviewing firewall policies
-- Examining automatic security updates
-- Evaluating Windows security settings
+## Security Limitations
 
-Security recommendations were considered with reference to established frameworks, including BSI IT-Grundschutz and CIS Benchmarks.
+Some security measures could not be fully implemented within Cisco Packet Tracer.
 
-## Limitations
+These included multi-factor authentication (MFA) and selected intrusion prevention system (IPS) capabilities.
 
-Some security features could not be fully implemented within Cisco Packet Tracer.
+Such measures were documented conceptually and distinguished from practically implemented controls.
 
-These included:
+## Key Learning Outcomes
 
-- Multi-factor authentication (MFA)
-- Certain intrusion prevention system (IPS) capabilities
-- Selected firewall and IPsec commands
+This project strengthened our skills in network architecture, firewall configuration, secure remote access, Linux and Windows hardening, automated monitoring, and systematic troubleshooting.
 
-These measures were documented conceptually rather than presented as fully implemented security controls.
-
-The simulated environment is intended for educational purposes and does not represent a production-ready enterprise security solution.
-
-## Key Takeaways
-
-This project strengthened our practical knowledge of:
-
-- Network security architecture
-- Cisco routing and firewall configuration
-- VPN technologies and troubleshooting
-- Linux and Windows system hardening
-- Security testing and network monitoring
-- Structured fault analysis
-- Technical documentation
-- Collaboration and project coordination
-
-One of the most important lessons was learning to investigate technical issues using measurable evidence instead of making assumptions.
+A key lesson was the importance of analysing packet flows and interpreting measurable evidence rather than making assumptions about the source of a network problem.
 
 ## Project Results
 
-**Status:** Completed – November 2026
+**Module:** ÜK 184 – Implementing Network Security
+
+**Status:** Completed, November 2026
 
 **Team:** Two students
 
-**Module:** ÜK 184 – Implementing Network Security
-
-**Final Grade:** 6.0 / 6.0 – Highest Swiss Grade
-
-The project successfully combined theoretical cybersecurity concepts with practical network configuration, testing, troubleshooting, and documentation.
+**Final Grade:** 6.0 / 6.0 (Highest Swiss Grade)
 
 ## Disclaimer
 
-This repository documents a fictional business environment developed for educational purposes.
+This repository documents a fictional business environment created for educational purposes.
 
-The network topology, security configurations, and documented attack scenarios are intended for controlled simulation and learning.
-
-Some security measures are conceptual or limited by the capabilities of Cisco Packet Tracer. The project should not be considered a production-ready security implementation.
+The simulations and scripts are intended for controlled laboratory use and should not be considered production-ready security implementations.
