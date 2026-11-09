@@ -1,7 +1,16 @@
+
 # Network Topology
 
-This directory contains the network architecture and Cisco Packet Tracer simulation files for the BauWert Network Security Lab.
+This directory contains network architecture diagrams and test evidence from the BauWert Network Security Lab.
 
-The topology demonstrates network segmentation, firewall zones, VPN connectivity, and access control.
+## Contents
 
-All files are reviewed before public release to prevent exposure of sensitive configuration data.
+- `bauwert-final-lab-topology.png` – Network architecture overview
+- `vpn-zone-packet-path.png` – VPN troubleshooting and corrected packet flow
+- `vpn-https-success.png` – Historical HTTPS connectivity test evidence
+
+## Note
+
+The original Cisco Packet Tracer project file is not included because the archived VPN configuration could not be successfully revalidated.
+
+The screenshots document results from the completed educational project.
