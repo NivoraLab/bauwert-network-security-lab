@@ -38,6 +38,8 @@ Our objective was to analyse the existing infrastructure, identify vulnerabiliti
 | Python | Syslog reception and alert monitoring |
 | PowerShell | Security log analysis |
 | VMware Workstation | Virtualized test environment |
+| Kali Linux & Nmap | Network scanning, port analysis and firewall validation in an isolated VMware lab |
+| Debian 13 | Centralized Syslog collection, Python-based monitoring and automated alert detection |
 
 ## Implementation
 
@@ -51,6 +53,22 @@ The project covered nine competency areas, from A1 to F1.
 | D1 | Security testing and validation |
 | E1 | Monitoring and log analysis |
 | F1 | Network troubleshooting and fault resolution |
+
+## Linux Security Testing Environment
+
+In addition to the Cisco Packet Tracer simulation, we established separate VMware-based Linux test environments.
+
+**Kali Linux & Nmap**
+
+Kali Linux was used to perform network security assessments against an Ubuntu Server. Using Nmap, we examined open and filtered ports, compared results from different virtual network zones, and evaluated the effects of UFW firewall rules.
+
+**Debian 13 & Syslog Monitoring**
+
+Debian 13 was configured as a centralized Syslog receiver, collecting log messages from an Ubuntu Server 24.04 environment over UDP port 5514.
+
+Custom Python scripts were used to process incoming messages, detect repeated network interface failures, filter duplicate events, and generate automated alerts.
+
+These additional environments provided hands-on experience in Linux administration, network security testing, and security monitoring beyond the capabilities of Cisco Packet Tracer.
 
 ## Security Monitoring
 
