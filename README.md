@@ -229,27 +229,9 @@ The Python implementation includes:
 
 The Syslog receiver uses UDP port `5514` in the original laboratory configuration.
 
-### PowerShell – Event Analysis
+### Debian Monitoring – Screenshots
 
-PowerShell scripts were developed to analyse exported Syslog messages from Cisco Packet Tracer.
-
-The analysis evaluates repeated interface failures, chronological event sequences and duplicate messages.
-
-An alert can be generated when two distinct failures of the same interface occur within five minutes.
-
-### Monitoring Test Evidence
-
-![Syslog Monitoring Alert](monitoring/monitoring-alert-detected.png)
-
-The screenshot documents the original monitoring tests, including successful alarm detection and handling of duplicate events.
-
-Source code, sample data and setup instructions:
-
-[Security Monitoring & Syslog Analysis](monitoring/)
-
-### Debian 13 – Centralized Syslog Monitoring
-
-A Debian 13 virtual machine was used to collect and monitor network events using custom Python scripts.
+The following screenshots document Syslog reception and automated alert detection in the Debian laboratory environment.
 
 **Syslog Receiver**
 
@@ -267,6 +249,23 @@ The implementation demonstrates practical experience with Linux administration, 
 
 For source code and technical details, see the [Monitoring Documentation](monitoring/).
 
+### PowerShell – Event Analysis
+
+PowerShell scripts were developed to analyse exported Syslog messages from Cisco Packet Tracer.
+
+The analysis evaluates repeated interface failures, chronological event sequences and duplicate messages.
+
+An alert can be generated when two distinct failures of the same interface occur within five minutes.
+
+### Monitoring Test Evidence
+
+![Syslog Monitoring Alert](monitoring/monitoring-alert-detected.png)
+
+The screenshot documents the original monitoring tests, including successful alarm detection and handling of duplicate events.
+
+Source code, sample data and setup instructions:
+
+[Security Monitoring & Syslog Analysis](monitoring/)
 
 ## VPN Troubleshooting – Root Cause Analysis
 
