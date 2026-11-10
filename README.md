@@ -247,6 +247,27 @@ Source code, sample data and setup instructions:
 
 [Security Monitoring & Syslog Analysis](monitoring/)
 
+### Debian 13 – Centralized Syslog Monitoring
+
+A Debian 13 virtual machine was used to collect and monitor network events using custom Python scripts.
+
+**Syslog Receiver**
+
+![Debian Syslog Receiver](monitoring/debian-syslog-receiver.png)
+
+The Python Syslog receiver collects incoming UDP messages and stores network events for further analysis.
+
+**Automated Alert Detection**
+
+![Debian Automated Alert Monitor](monitoring/debian-automated-alert-redacted.png)
+
+The monitoring script detects repeated interface failures and generates alerts based on defined event conditions.
+
+The implementation demonstrates practical experience with Linux administration, Python automation, log analysis, and network monitoring.
+
+For source code and technical details, see the [Monitoring Documentation](monitoring/).
+
+
 ## VPN Troubleshooting – Root Cause Analysis
 
 One of the most technically challenging parts of the project involved troubleshooting an IPsec VPN connection.
