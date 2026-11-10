@@ -36,7 +36,7 @@ The implementation was developed and tested in a controlled educational laborato
 | `E1_Router1_Syslog_Test5_Ereignisfolge.txt` | Sample Syslog events |
 | `monitoring-alert-detected.png` | PowerShell monitoring test evidence |
 | `debian-syslog-receiver.png` | Debian Syslog receiver screenshot |
-| `debian-automated-alert.png` | Debian automated monitoring screenshot |
+| `debian-automated-alert-redacted.png` | Redacted Debian automated monitoring screenshot |
 
 ## 1. Debian 13 – Centralized Syslog Receiver
 
