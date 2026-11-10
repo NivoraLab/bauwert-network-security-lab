@@ -113,7 +113,7 @@ The script monitors newly received events. Previously stored log entries are ski
 
 The following screenshot documents the automated monitoring implementation in the Debian test environment.
 
-![Debian Automated Alert Monitor](debian-automated-alert.png)
+![Debian Automated Alert Monitor](debian-automated-alert-redacted.png)
 
 ## 3. PowerShell – Offline Syslog Analysis
 
