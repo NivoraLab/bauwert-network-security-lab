@@ -97,6 +97,25 @@ Detailed documentation:
 
 ## Network Security Testing – Kali Linux & Nmap
 
+### Nmap Security Assessment – Before & After UFW
+
+The following screenshots document the network exposure of an Ubuntu Server before and after UFW firewall hardening.
+
+**Before – Initial Nmap Scan**
+
+![Kali Linux Nmap Scan Before UFW](security-testing/nmap-before-ufw.png)
+
+The initial scan identified an open SSH service on TCP port 22 and 999 closed TCP ports.
+
+**After – Firewall Hardening**
+
+![Kali Linux Nmap Scan After UFW](security-testing/nmap-after-ufw.png)
+
+After applying UFW restrictions, SSH remained accessible while the other 999 scanned TCP ports were reported as filtered.
+
+**Key Result:** The test demonstrates how firewall configuration changes the network responses visible during reconnaissance.
+
+
 In addition to Cisco Packet Tracer, we established VMware-based Linux laboratory environments.
 
 Kali Linux and Nmap were used to assess network accessibility and investigate the effectiveness of firewall restrictions on an Ubuntu Server.
