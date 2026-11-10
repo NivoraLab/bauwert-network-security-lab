@@ -1,37 +1,58 @@
 # Security Monitoring & Syslog Analysis
 
-## Overview
+**Python | PowerShell | Debian 13 | Cisco Packet Tracer | Network Security**
 
-This directory contains Python and PowerShell scripts developed as part of the BauWert Network Security Lab (ÜK 184).
+## Project Overview
 
-The objective was to implement centralized Syslog collection, analyse network events, identify repeated interface failures, and generate automated alerts.
+This directory contains the security monitoring scripts, test data, and technical evidence developed for the BauWert Network Security Lab (ÜK 184).
 
-The project uses two complementary monitoring approaches:
+The objective was to collect Syslog messages, analyse network events, detect repeated interface failures, and generate automated alerts.
 
-- **Python:** Real-time Syslog reception and automated alert monitoring on Debian Linux.
-- **PowerShell:** Offline analysis of exported Cisco Packet Tracer Syslog events.
+Two complementary monitoring approaches were implemented:
+
+- **Python on Debian 13:** UDP Syslog collection and automated monitoring of network interface events.
+- **PowerShell on Windows:** Offline analysis of exported Cisco Packet Tracer Syslog messages.
+
+The implementation was developed and tested in a controlled educational laboratory environment.
+
+## Technologies & Tools
+
+| Technology | Purpose |
+|---|---|
+| Debian 13 | Centralized Syslog receiver |
+| Python 3 | Syslog collection and automated alert detection |
+| PowerShell 5.1 | Offline log analysis |
+| Cisco Packet Tracer | Simulation of network events |
+| UDP Port 5514 | Syslog message reception |
+| VMware Workstation | Virtualized Linux environment |
 
 ## Project Files
 
 | File | Description |
 |---|---|
-| `syslog_empfaenger.py` | Receives Syslog messages over UDP port 5514 |
-| `alarm_monitor.py` | Monitors new events and generates alerts |
-| `E1_Syslog_Alarmregel_Ereignisfolge (1).ps1` | Analyses event sequences and filters duplicates |
-| `E1_Router1_Syslog_Test5_Ereignisfolge.txt` | Sample Syslog events for testing |
-| `monitoring-alert-detected.png` | Screenshot of the original monitoring tests |
+| `syslog_empfaenger.py` | UDP Syslog receiver |
+| `alarm_monitor.py` | Automated interface failure monitoring |
+| `E1_Syslog_Alarmregel_Ereignisfolge (1).ps1` | PowerShell event sequence analysis |
+| `E1_Router1_Syslog_Test5_Ereignisfolge.txt` | Sample Syslog events |
+| `monitoring-alert-detected.png` | PowerShell monitoring test evidence |
+| `debian-syslog-receiver.png` | Debian Syslog receiver screenshot |
+| `debian-automated-alert.png` | Debian automated monitoring screenshot |
 
-## 1. Python Syslog Receiver
+## 1. Debian 13 – Centralized Syslog Receiver
 
-**Environment:** Debian Linux with Python 3
+A Debian-based laboratory environment was configured to receive and store Syslog messages.
 
-The Python receiver listens on a configured network interface and stores incoming Syslog messages in a local log file.
+The Python application uses a UDP socket to listen for incoming messages and records their timestamps, sender IP addresses, and message contents.
 
-Configuration used in the original lab:
+### Original Laboratory Configuration
 
-- Listening address: `10.184.1.20`
-- UDP port: `5514`
-- Log file: `~/UEK184/Syslog-Monitoring/syslog.log`
+| Parameter | Value |
+|---|---|
+| Server | Debian 13 |
+| Listening IP | `10.184.1.20` |
+| Protocol | UDP |
+| Port | `5514` |
+| Log file | `~/UEK184/Syslog-Monitoring/syslog.log` |
 
 ### Setup
 
@@ -39,91 +60,171 @@ Create the required directory:
 
 `mkdir -p ~/UEK184/Syslog-Monitoring`
 
-Create an empty log file:
+Create the Syslog file:
 
 `touch ~/UEK184/Syslog-Monitoring/syslog.log`
 
-Ensure that the configured IP address exists on the Linux host. Otherwise, modify the `HOST` variable in `syslog_empfaenger.py` to match your lab environment.
-
-Start the receiver from the repository's `monitoring` directory:
+Start the receiver from the directory containing the script:
 
 `python3 syslog_empfaenger.py`
 
-The receiver displays incoming Syslog messages and writes them to the log file.
+The receiver displays incoming messages and stores them in the log file.
 
-## 2. Automated Alert Monitoring
+**Note:** The configured IP address must exist on the host. For a different laboratory environment, update the `HOST` variable in the Python script.
 
-The `alarm_monitor.py` script analyses newly received Syslog events.
+### Debian – Syslog Receiver Evidence
 
-It detects interface status changes and records repeated failures.
+The following screenshot documents the Syslog receiver in the original Debian laboratory environment.
 
-**Alert conditions:**
+![Debian Syslog Receiver](debian-syslog-receiver.png)
 
-- Two separate interface failures
-- Same source IP address and network interface
-- Within a five-minute monitoring window
+## 2. Python – Automated Alert Monitoring
 
-Repeated DOWN messages without an intervening UP event are ignored to prevent duplicate alerts.
+The second Python script, `alarm_monitor.py`, monitors newly appended Syslog messages.
 
-Start the monitoring script in a second terminal:
+It identifies network interface status changes and detects repeated failures.
 
-`python3 alarm_monitor.py`
+### Alert Detection
 
-Detected alerts are written to:
+The monitoring logic evaluates the following conditions:
+
+- Two interface failures within five minutes.
+- The same source IP address and network interface.
+- An intervening UP event distinguishes separate failures.
+- Repeated DOWN messages without an intervening UP event are ignored as duplicates.
+
+The detection window is configured to 300 seconds.
+
+When the alert condition is met, a message is displayed and written to:
 
 `~/UEK184/Syslog-Monitoring/alarme.log`
 
-The monitoring script reads new log entries from the end of the file. Previously stored messages are not processed when the script starts.
+### Running the Monitor
 
-## 3. PowerShell Syslog Analysis
+Start the Syslog receiver first.
 
-The PowerShell script provides an offline analysis of exported Cisco Packet Tracer events.
+Open a second terminal and execute:
 
-It evaluates interface failures, event sequences, and duplicate messages.
+`python3 alarm_monitor.py`
 
-The script preserves event order when multiple messages have identical timestamps.
+The script monitors newly received events. Previously stored log entries are skipped when monitoring starts.
 
-### Example
+### Debian – Automated Alert Evidence
 
-Open PowerShell in the `monitoring` directory and execute:
+The following screenshot documents the automated monitoring implementation in the Debian test environment.
 
-`.\E1_Syslog_Alarmregel_Ereignisfolge (1).ps1 -LogDatei "E1_Router1_Syslog_Test5_Ereignisfolge.txt"`
+![Debian Automated Alert Monitor](debian-automated-alert.png)
 
-If PowerShell blocks script execution, review the local execution policy before running the script.
+## 3. PowerShell – Offline Syslog Analysis
 
-The sample log contains the following sequence:
+A separate PowerShell script was developed to analyse exported Syslog messages from Cisco Packet Tracer.
 
-1. Interface DOWN
-2. Interface UP
-3. Interface DOWN
+Unlike the Python implementation, this solution does not provide live monitoring. It processes previously recorded event data.
 
-The expected result is an alert indicating two separate interface failures within five minutes.
+### Analysis Features
 
-## 4. Monitoring Test Evidence
+The script evaluates:
 
-![Syslog Alert Detection](monitoring-alert-detected.png)
+- Network interface DOWN and UP events.
+- Repeated interface failures within a configurable time window.
+- Event sequences sharing identical timestamps.
+- Duplicate DOWN messages.
+- Interface-specific alarm conditions.
 
-The screenshot shows the original PowerShell test results, including successful alarm detection and duplicate-event handling.
+To preserve the correct event sequence, events are evaluated using both their timestamps and their original line positions.
 
-## 5. Limitations
+### Running the PowerShell Script
 
-- The Python scripts use a fixed laboratory IP address and directory structure.
-- The receiver uses UDP, which does not guarantee message delivery.
-- The PowerShell analysis processes exported log files rather than live Packet Tracer events.
-- These scripts are educational prototypes and require additional testing, error handling, and security controls before production use.
+Open PowerShell in the `monitoring` directory.
 
-## Key Learning Outcomes
+Example command:
 
-This implementation provided practical experience with:
+`& '.\E1_Syslog_Alarmregel_Ereignisfolge (1).ps1' -LogDatei 'E1_Router1_Syslog_Test5_Ereignisfolge.txt'`
 
-- Linux system administration
-- Python socket programming
-- Centralized Syslog collection
-- Automated security event analysis
-- PowerShell scripting
-- Event correlation and duplicate detection
-- Network monitoring and troubleshooting
+The script displays the number of detected failure messages, distinct failures, removed duplicates, and the resulting alarm status.
 
-**Project:** BauWert Network Security Lab  
-**Module:** ÜK 184 – Implementing Network Security  
-**Final Grade:** 6.0 / 6.0
+PowerShell script execution must be permitted by the applicable local execution policy.
+
+## 4. PowerShell – Test Results
+
+The original project included tests using different Syslog event sequences.
+
+### Test Scenario: Repeated Interface Failure
+
+1. The monitored interface changes to DOWN.
+2. The interface returns to UP.
+3. The same interface changes to DOWN again.
+4. Both distinct failures occur within five minutes.
+
+**Expected result:** An alarm is generated for the repeated interface failure.
+
+### Duplicate Event Handling
+
+Repeated DOWN messages with the same timestamp and no intervening UP event are treated as duplicates.
+
+This prevents such duplicate entries from being counted as independent failures.
+
+### PowerShell Monitoring Evidence
+
+![PowerShell Syslog Alert Detection](monitoring-alert-detected.png)
+
+The screenshot documents the original PowerShell test results, including alarm detection and duplicate-event handling.
+
+## 5. Security Benefits
+
+The monitoring implementation demonstrates several important principles of network security:
+
+- Centralized collection of network events.
+- Automated detection of repeated interface failures.
+- Improved visibility into network availability.
+- Correlation of related Syslog messages.
+- Reduction of duplicate-triggered alerts.
+- Structured analysis of security-relevant events.
+
+These mechanisms support the identification and investigation of unusual network behaviour.
+
+However, repeated interface failures alone do not prove that a cybersecurity attack has occurred.
+
+## 6. Technical Limitations
+
+The monitoring solution was developed for educational purposes and has several limitations:
+
+- The Python receiver uses a fixed laboratory IP address.
+- UDP does not guarantee message delivery.
+- The scripts depend on the expected Syslog message format.
+- The Python scripts require the configured log directory to exist.
+- The PowerShell implementation processes exported files rather than live events.
+- The scripts have not been validated as production-ready monitoring solutions.
+
+A production implementation would require additional security controls, testing, error handling, and operational monitoring.
+
+## 7. Key Learning Outcomes
+
+This part of the project strengthened our practical knowledge of:
+
+- Debian Linux administration.
+- Python socket programming.
+- Centralized Syslog collection.
+- Automated event detection.
+- PowerShell scripting.
+- Log analysis and event correlation.
+- Duplicate detection.
+- Network monitoring and troubleshooting.
+
+The main lesson was understanding how network events can be collected, analysed, and converted into actionable alerts through simple automation mechanisms.
+
+---
+
+## Project Information
+
+**Project:** BauWert – Network Security Lab
+
+**Module:** ÜK 184 – Implementing Network Security
+
+**Environment:** Debian 13, Windows PowerShell, Cisco Packet Tracer
+
+**Status:** Completed – November 2026
+
+**Final Grade:** 6.0 / 6.0 (Highest Swiss Grade)
+
+**Disclaimer:** All configurations, scripts, and tests were created for controlled educational laboratory use and are not intended for production deployment without further review.
