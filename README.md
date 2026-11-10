@@ -186,6 +186,31 @@ Detailed documentation:
 
 [Linux & Windows System Hardening](system-hardening/)
 
+### System Hardening – Practical Evidence
+
+The following screenshots document security hardening and configuration verification performed on Ubuntu Server and Windows.
+
+**Ubuntu Server – SSH & UFW Firewall**
+
+![Ubuntu SSH and UFW Hardening](system-hardening/ubuntu-ssh-ufw-hardening.png)
+
+SSH security settings and host-based firewall rules were configured and verified.
+
+**Ubuntu Server – Security Updates & AppArmor**
+
+![Ubuntu Updates and AppArmor](system-hardening/ubuntu-updates-apparmor.png)
+
+Package update checks and AppArmor security profile status were examined.
+
+**Windows – Microsoft Defender Firewall**
+
+![Windows Firewall Profiles](system-hardening/windows-firewall-profiles.png)
+
+Microsoft Defender Firewall was verified as enabled for the domain, private and public network profiles.
+
+For detailed configuration notes, see the [System Hardening Documentation](system-hardening/).
+
+
 ## Security Monitoring & Automation
 
 We developed Python and PowerShell scripts to support centralized logging, automated event analysis and network monitoring.
