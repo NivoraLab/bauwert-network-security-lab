@@ -99,25 +99,6 @@ Detailed documentation:
 
 ### Nmap Security Assessment – Before & After UFW
 
-The following screenshots demonstrate the results of network security testing performed with Kali Linux against an Ubuntu Server.
-
-**Before – Initial Nmap Scan**
-
-![Nmap Before UFW](security-testing/nmap-before-ufw.png)
-
-Before firewall hardening, SSH was accessible on TCP port 22 and 999 scanned TCP ports were reported as closed.
-
-**After – UFW Firewall Hardening**
-
-![Nmap After UFW](security-testing/nmap-after-ufw.png)
-
-After configuring UFW, SSH remained accessible while the other 999 scanned TCP ports were reported as filtered.
-
-**Result:** The comparison demonstrates the effect of host-based firewall restrictions on network exposure.
-
-
-### Nmap Security Assessment – Before & After UFW
-
 The following screenshots document the network exposure of an Ubuntu Server before and after UFW firewall hardening.
 
 **Before – Initial Nmap Scan**
