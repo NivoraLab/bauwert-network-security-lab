@@ -1,118 +1,188 @@
-# System Hardening – Linux & Windows
+# Linux & Windows System Hardening
 
-## Overview
+**Ubuntu Server | Windows Security | SSH | UFW | AppArmor | Security Updates**
 
-This section documents the system-hardening activities performed during the BauWert Network Security Lab (ÜK 184).
+## Project Overview
 
-The objective was to reduce potential attack surfaces, strengthen system configurations, and evaluate security controls in Linux and Windows environments.
+This directory documents the operating system hardening measures implemented and reviewed during the BauWert Network Security Lab (ÜK 184).
 
-The work was based on established security principles, including least privilege, secure configuration, and defence in depth.
+The objective was to reduce unnecessary attack surfaces, restrict unauthorized access, and improve the security posture of Linux and Windows systems.
 
-## 1. Ubuntu Server Hardening
+The activities were performed in controlled laboratory environments.
 
-An Ubuntu Server was used to examine and implement security measures for a Linux-based server environment.
+## Technologies & Security Controls
 
-### SSH Security
+| Component | Security Focus |
+|---|---|
+| Ubuntu Server | Linux system hardening |
+| OpenSSH | Secure remote administration |
+| UFW | Host-based firewall |
+| AppArmor | Application access control |
+| APT | Package and security updates |
+| unattended-upgrades | Automatic update mechanism |
+| Windows Security | Endpoint protection |
+| Microsoft Defender Firewall | Network traffic protection |
+| Windows Account Policies | User and authentication security |
 
-The SSH configuration was reviewed and hardened using the following settings:
+## 1. Ubuntu Server – SSH Hardening
 
-| Setting | Configuration | Purpose |
+SSH configuration was reviewed to reduce risks associated with remote administration.
+
+The effective configuration included:
+
+| Setting | Verified Value | Security Purpose |
 |---|---|---|
-| PermitRootLogin | no | Disable direct root login |
+| PermitRootLogin | no | Prevent direct SSH login as root |
 | MaxAuthTries | 3 | Limit authentication attempts per connection |
 | X11Forwarding | no | Disable unnecessary X11 forwarding |
 
-The effective SSH configuration was checked using `sshd -T`.
+The effective SSH settings were checked using `sshd -T`.
 
-### UFW Firewall
+These measures help restrict remote access and reduce unnecessary SSH functionality.
 
-Ubuntu's Uncomplicated Firewall (UFW) was used to restrict network access.
+## 2. Ubuntu Server – UFW Firewall
 
-The configuration included reviewing firewall rules, limiting SSH connection attempts, and restricting unnecessary services.
+UFW was configured to control incoming and outgoing network traffic.
 
-Example command:
+The documented configuration included:
 
-`sudo ufw limit 22/tcp`
+- Deny incoming connections by default.
+- Allow outgoing connections by default.
+- Apply rate limiting to incoming SSH connections on TCP port 22.
+- Enable the firewall.
+- Enable firewall logging.
 
-This applies rate limiting to SSH connections rather than completely blocking administrative access.
+### Firewall Verification
 
-### Security Updates
+The `ufw status verbose` output confirmed:
 
-Automatic security updates were examined using `unattended-upgrades`.
+- Firewall status: active
+- Incoming policy: deny
+- Outgoing policy: allow
+- SSH port 22: LIMIT IN
+- IPv4 and IPv6 SSH rules present
 
-The objective was to reduce exposure to known vulnerabilities by keeping relevant software packages updated.
+### SSH & UFW Evidence
 
-### AppArmor
+![Ubuntu SSH and UFW Hardening](ubuntu-ssh-ufw-hardening.png)
 
-AppArmor was examined as an additional application security mechanism.
+The screenshot shows the effective SSH settings and active UFW firewall rules from the original laboratory tests.
 
-The command `aa-status` was used to inspect the status of loaded security profiles.
+## 3. Ubuntu Server – Security Updates
 
-## 2. Windows System Hardening
+Package updates and the availability of the `unattended-upgrades` package were reviewed.
 
-Windows security controls were examined to evaluate protection against malware, ransomware, unauthorized access, and insecure system configurations.
+The documented terminal output showed that the package lists were updated and no additional package upgrades were pending at the time of verification.
 
-### Security Controls
+The `unattended-upgrades` package was already installed.
 
-| Component | Security Objective |
+This check documents the package state; it does not independently demonstrate that an automatic update was successfully executed.
+
+## 4. Ubuntu Server – AppArmor
+
+AppArmor was used to examine application-level security restrictions.
+
+The original verification confirmed:
+
+- AppArmor kernel module loaded.
+- 186 security profiles loaded.
+- 110 profiles in enforce mode.
+
+These results show that AppArmor was active and enforcing restrictions for a subset of the loaded profiles.
+
+### Updates & AppArmor Evidence
+
+![Ubuntu Updates and AppArmor](ubuntu-updates-apparmor.png)
+
+The screenshot documents the package update checks and AppArmor status.
+
+## 5. Windows – Endpoint Security
+
+Windows security settings were reviewed as part of the system hardening activities.
+
+The review covered:
+
+- Microsoft Defender Antivirus.
+- Microsoft Defender Firewall.
+- Microsoft Defender SmartScreen.
+- Controlled Folder Access.
+- Windows Update.
+- Local account security policies.
+- Administrative permissions.
+
+These controls contribute to malware protection, network isolation, account security, and ransomware risk reduction.
+
+### Windows Firewall Verification
+
+The original screenshot confirms that Microsoft Defender Firewall was enabled for all three network profiles:
+
+| Network Profile | Firewall Status |
 |---|---|
-| Microsoft Defender | Malware and threat protection |
-| Windows Firewall | Network traffic filtering |
-| Controlled Folder Access | Protection against unauthorized file modifications |
-| Microsoft Defender SmartScreen | Protection against suspicious applications and downloads |
-| Windows Update | Security patch management |
-| Account Policies | Password and account security |
-| User Privileges | Review of administrative permissions |
+| Domain network | Enabled |
+| Private network | Enabled |
+| Public network | Enabled |
 
-### Account Security
+The public network profile was the active profile at the time of the screenshot.
 
-Local account policies were examined using the Windows command:
+### Windows Firewall Evidence
 
-`net accounts`
+![Windows Firewall Profiles](windows-firewall-profiles.png)
 
-Administrative group membership was also reviewed to identify potential risks associated with excessive privileges.
+This screenshot demonstrates the Windows Firewall status in the original test environment.
 
-## 3. Security Verification
+## 6. Security Verification Summary
 
-The system-hardening activities included reviewing configuration settings, checking effective security policies, and examining the accessibility of network services.
+| Security Control | Verification Method | Documented Result |
+|---|---|---|
+| SSH root login | Effective SSH configuration | Disabled |
+| SSH authentication attempts | Effective SSH configuration | Limited to 3 |
+| SSH X11 forwarding | Effective SSH configuration | Disabled |
+| UFW firewall | Firewall status and rules | Active |
+| SSH firewall restriction | UFW rule inspection | Rate limiting enabled |
+| Ubuntu updates | APT package check | No pending upgrades shown |
+| AppArmor | Security profile status | Active, profiles enforced |
+| Windows Firewall | Windows Security interface | Enabled for all network profiles |
 
-The results were documented through configuration outputs and screenshots.
+## 7. Security Benefits
 
-Some measures were evaluated rather than fully enforced. The original project documentation distinguishes between implemented configurations, reviewed settings, and recommendations.
+The hardening activities demonstrate the importance of applying multiple layers of protection:
 
-## 4. Security Standards
+- Restricting unnecessary remote access.
+- Filtering incoming network traffic.
+- Maintaining operating system packages.
+- Applying application-level restrictions.
+- Enabling endpoint firewall protection.
+- Reviewing account and authentication security.
 
-The activities were informed by established security guidance, including:
+Together, these controls contribute to a defence-in-depth security strategy.
 
-- BSI IT-Grundschutz
-- CIS Benchmarks
-- Microsoft Security Baselines
+## 8. Limitations
 
-These resources provided guidance for secure system configuration and risk reduction.
+The work was conducted in educational laboratory environments.
 
-## 5. Key Learning Outcomes
+The screenshots document specific configuration checks at the time of testing. They do not constitute a complete security audit.
 
-This part of the project strengthened our understanding of:
+Not every Windows security feature discussed in the project is independently demonstrated by the three screenshots in this directory.
 
-- Linux server administration
-- Secure SSH configuration
-- Host-based firewall management
-- Automated security updates
-- Application security mechanisms
-- Windows endpoint protection
-- Account security and least privilege
-- Verification of security configurations
+Additional validation would be necessary before applying these configurations in a production environment.
 
-## Limitations
+## Key Learning Outcomes
 
-The configurations were examined in controlled educational test environments.
-
-The documented measures demonstrate selected hardening practices and do not represent a complete production security baseline.
+- Linux system administration and hardening.
+- Secure SSH configuration.
+- UFW firewall configuration and verification.
+- Linux package maintenance.
+- AppArmor security enforcement.
+- Windows endpoint protection.
+- Security configuration validation.
+- Technical evidence documentation.
 
 ---
 
-**Project:** BauWert Network Security Lab
+**Project:** BauWert – Network Security Lab
 
 **Module:** ÜK 184 – Implementing Network Security
 
-**Final Grade:** 6.0 / 6.0
+**Final Grade:** 6.0 / 6.0 – Highest Swiss Grade
+
+**Disclaimer:** All configurations and tests were developed for educational purposes in controlled laboratory environments.
