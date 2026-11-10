@@ -1,129 +1,313 @@
-# Security Monitoring & Syslog Analysis
+# BauWert – Network Security Lab
 
-## Overview
+**Network Security | Cisco Packet Tracer | Kali Linux | Debian | Ubuntu | Python | PowerShell**
 
-This directory contains Python and PowerShell scripts developed as part of the BauWert Network Security Lab (ÜK 184).
+**Final Grade: 6.0 / 6.0 – Highest Swiss Grade**
 
-The objective was to implement centralized Syslog collection, analyse network events, identify repeated interface failures, and generate automated alerts.
+A hands-on cybersecurity project focused on securing the network infrastructure of a fictional construction company against ransomware, unauthorized access, data exfiltration, and lateral movement.
 
-The project uses two complementary monitoring approaches:
+Developed as a two-person team project during the Swiss vocational training programme in Information Technology (EFZ), specializing in Platform Development.
 
-- **Python:** Real-time Syslog reception and automated alert monitoring on Debian Linux.
-- **PowerShell:** Offline analysis of exported Cisco Packet Tracer Syslog events.
+The project combines network security design, practical system hardening, security testing, automated monitoring, and structured troubleshooting.
 
-## Project Files
+## Network Architecture
 
-| File | Description |
+![BauWert Network Topology](topology/bauwert-final-lab-topology.png)
+
+The simulated infrastructure includes Cisco routers and switches, a Cisco ASA firewall, internal servers, a DMZ, wireless networks, a VPN gateway, and a centralized logging server.
+
+The architecture follows the principles of **network segmentation, least privilege, access control, and defence in depth**.
+
+## Project Overview
+
+The project was based on a simulated ransomware scenario called **Blackout**.
+
+The attack scenario involved compromised Microsoft 365 credentials, unauthorized network access, lateral movement, data exfiltration, and the encryption of business-critical systems.
+
+Our objectives were to:
+
+- Analyse the existing network infrastructure.
+- Identify vulnerabilities and evaluate security risks.
+- Design a secure and segmented network architecture.
+- Configure firewalls, access controls, and remote access.
+- Harden Linux and Windows systems.
+- Perform security tests and validate configurations.
+- Implement centralized logging and automated monitoring.
+- Troubleshoot network connectivity and VPN issues.
+
+## Technologies & Tools
+
+| Technology | Application |
 |---|---|
-| `syslog_empfaenger.py` | Receives Syslog messages over UDP port 5514 |
-| `alarm_monitor.py` | Monitors new events and generates alerts |
-| `E1_Syslog_Alarmregel_Ereignisfolge (1).ps1` | Analyses event sequences and filters duplicates |
-| `E1_Router1_Syslog_Test5_Ereignisfolge.txt` | Sample Syslog events for testing |
-| `monitoring-alert-detected.png` | Screenshot of the original monitoring tests |
+| Cisco Packet Tracer | Network simulation and security testing |
+| Cisco ASA Firewall | Firewall configuration and access control |
+| Cisco ISR Routers | Routing and VPN configuration |
+| VLANs & DMZ | Network segmentation and service isolation |
+| IPsec VPN | Secure remote access |
+| Access Control Lists | Traffic filtering and access restrictions |
+| Kali Linux | Security assessment and network reconnaissance |
+| Nmap | Port scanning and firewall validation |
+| Ubuntu Server | Linux system hardening and security testing |
+| Debian 13 | Centralized Syslog reception and monitoring |
+| Windows | Endpoint security and account policies |
+| Python | Syslog collection and automated alert detection |
+| PowerShell | Offline security log analysis |
+| VMware Workstation | Virtualized laboratory environments |
 
-## 1. Python Syslog Receiver
+## Project Implementation
 
-**Environment:** Debian Linux with Python 3
+The project covered nine competency areas, from A1 to F1.
 
-The Python receiver listens on a configured network interface and stores incoming Syslog messages in a local log file.
+| Competency | Focus |
+|---|---|
+| A1 | Existing infrastructure analysis |
+| A2 | Vulnerability identification and risk assessment |
+| B1 | Secure network architecture and segmentation |
+| B2 | VPN, remote access and intrusion detection concepts |
+| C1 | Firewall and security component configuration |
+| C2 | Linux and Windows system hardening |
+| D1 | Security testing and validation |
+| E1 | Monitoring, Syslog analysis and alert detection |
+| F1 | Troubleshooting and fault resolution |
 
-Configuration used in the original lab:
+## Network Security Controls
 
-- Listening address: `10.184.1.20`
-- UDP port: `5514`
-- Log file: `~/UEK184/Syslog-Monitoring/syslog.log`
+We designed and examined a segmented network architecture to reduce unauthorized access and limit potential attack propagation.
 
-### Setup
+The security concept included:
 
-Create the required directory:
+- Separation of office, server, guest and employee networks.
+- DMZ protection for externally accessible services.
+- Firewall rules restricting unnecessary communication.
+- VPN connectivity for remote users.
+- Access Control Lists following least-privilege principles.
+- Monitoring of security-relevant network events.
 
-`mkdir -p ~/UEK184/Syslog-Monitoring`
+### Firewall and DMZ Testing
 
-Create an empty log file:
+Security tests were performed to examine permitted and restricted network communication.
 
-`touch ~/UEK184/Syslog-Monitoring/syslog.log`
+The documented tests included successful HTTPS access to a DMZ web server and restrictions on HTTP connections.
 
-Ensure that the configured IP address exists on the Linux host. Otherwise, modify the `HOST` variable in `syslog_empfaenger.py` to match your lab environment.
+Firewall configuration, routing information and packet-flow evidence were used to evaluate the observed results.
 
-Start the receiver from the repository's `monitoring` directory:
+Detailed documentation:
 
-`python3 syslog_empfaenger.py`
+[Network Security Controls](network-security-controls/)
 
-The receiver displays incoming Syslog messages and writes them to the log file.
+## Network Security Testing – Kali Linux & Nmap
 
-## 2. Automated Alert Monitoring
+In addition to Cisco Packet Tracer, we established VMware-based Linux laboratory environments.
 
-The `alarm_monitor.py` script analyses newly received Syslog events.
+Kali Linux and Nmap were used to assess network accessibility and investigate the effectiveness of firewall restrictions on an Ubuntu Server.
 
-It detects interface status changes and records repeated failures.
+### Initial Assessment
 
-**Alert conditions:**
+Nmap scans were performed to identify reachable network services and examine open, closed and filtered ports.
 
-- Two separate interface failures
-- Same source IP address and network interface
-- Within a five-minute monitoring window
+### Firewall Configuration
 
-Repeated DOWN messages without an intervening UP event are ignored to prevent duplicate alerts.
+Ubuntu's Uncomplicated Firewall (UFW) was used to restrict unnecessary network communication while retaining authorized SSH access.
 
-Start the monitoring script in a second terminal:
+### Verification
 
-`python3 alarm_monitor.py`
+Additional Nmap scans were performed after applying firewall restrictions.
 
-Detected alerts are written to:
+Comparing the results demonstrated the effect of the firewall configuration on network exposure.
 
-`~/UEK184/Syslog-Monitoring/alarme.log`
+The tests helped us understand the differences between open, closed and filtered ports and the importance of validating security controls through practical measurements.
 
-The monitoring script reads new log entries from the end of the file. Previously stored messages are not processed when the script starts.
+Detailed documentation:
 
-## 3. PowerShell Syslog Analysis
+[Security Testing with Kali Linux & Nmap](security-testing/)
 
-The PowerShell script provides an offline analysis of exported Cisco Packet Tracer events.
+## System Hardening – Linux & Windows
 
-It evaluates interface failures, event sequences, and duplicate messages.
+System hardening was performed and evaluated in dedicated virtualized test environments.
 
-The script preserves event order when multiple messages have identical timestamps.
+### Ubuntu Server Hardening
 
-### Example
+We examined and applied security measures including:
 
-Open PowerShell in the `monitoring` directory and execute:
+- Restricted SSH root login.
+- Reduced SSH authentication attempts.
+- Disabled unnecessary SSH features.
+- UFW firewall configuration.
+- Automatic security updates.
+- AppArmor security profiles.
+- Verification of effective system configurations.
 
-`.\E1_Syslog_Alarmregel_Ereignisfolge (1).ps1 -LogDatei "E1_Router1_Syslog_Test5_Ereignisfolge.txt"`
+Example SSH configuration:
 
-If PowerShell blocks script execution, review the local execution policy before running the script.
+```text
+PermitRootLogin no
+MaxAuthTries 3
+X11Forwarding no
+```
 
-The sample log contains the following sequence:
+The configuration was reviewed using commands such as `sshd -T`, `ufw status`, and `aa-status`.
 
-1. Interface DOWN
-2. Interface UP
-3. Interface DOWN
+### Windows Security
 
-The expected result is an alert indicating two separate interface failures within five minutes.
+We reviewed Windows endpoint and account protection mechanisms, including:
 
-## 4. Monitoring Test Evidence
+- Microsoft Defender Antivirus
+- Windows Firewall
+- Controlled Folder Access
+- Microsoft Defender SmartScreen
+- Windows Update
+- Local account policies
+- Administrator permissions
 
-![Syslog Alert Detection](monitoring-alert-detected.png)
+The `net accounts` command was used to examine local account policies.
 
-The screenshot shows the original PowerShell test results, including successful alarm detection and duplicate-event handling.
+The work was informed by established security guidance, including BSI IT-Grundschutz, CIS Benchmarks and Microsoft Security Baselines.
 
-## 5. Limitations
+Detailed documentation:
 
-- The Python scripts use a fixed laboratory IP address and directory structure.
-- The receiver uses UDP, which does not guarantee message delivery.
-- The PowerShell analysis processes exported log files rather than live Packet Tracer events.
-- These scripts are educational prototypes and require additional testing, error handling, and security controls before production use.
+[Linux & Windows System Hardening](system-hardening/)
+
+## Security Monitoring & Automation
+
+We developed Python and PowerShell scripts to support centralized logging, automated event analysis and network monitoring.
+
+### Debian 13 – Centralized Syslog Monitoring
+
+A Debian-based laboratory environment was used to receive and process Syslog messages.
+
+The Python implementation includes:
+
+- UDP-based Syslog reception.
+- Local storage of incoming messages.
+- Detection of network interface status changes.
+- Identification of repeated interface failures.
+- Automated generation of alerts.
+
+The Syslog receiver uses UDP port `5514` in the original laboratory configuration.
+
+### PowerShell – Event Analysis
+
+PowerShell scripts were developed to analyse exported Syslog messages from Cisco Packet Tracer.
+
+The analysis evaluates repeated interface failures, chronological event sequences and duplicate messages.
+
+An alert can be generated when two distinct failures of the same interface occur within five minutes.
+
+### Monitoring Test Evidence
+
+![Syslog Monitoring Alert](monitoring/monitoring-alert-detected.png)
+
+The screenshot documents the original monitoring tests, including successful alarm detection and handling of duplicate events.
+
+Source code, sample data and setup instructions:
+
+[Security Monitoring & Syslog Analysis](monitoring/)
+
+## VPN Troubleshooting – Root Cause Analysis
+
+One of the most technically challenging parts of the project involved troubleshooting an IPsec VPN connection.
+
+### Problem
+
+During the original project tests, the VPN tunnel was established successfully, but the remote client could not access the internal server (Server0) over HTTPS.
+
+### Investigation
+
+We analysed the connection using:
+
+- Firewall ACL hit counters.
+- IPsec encryption and decryption counters.
+- Routing tables.
+- ARP behaviour.
+- Cisco Packet Tracer simulation mode.
+- End-to-end packet-flow analysis.
+
+### Root Cause and Resolution
+
+The investigation identified a problem involving the return path of VPN traffic and the ASA firewall's ARP behaviour.
+
+A dedicated VPN network zone was introduced to correct the packet path without unnecessarily relaxing the existing firewall security rules.
+
+### Packet Flow Analysis
+
+![VPN Packet Flow](topology/vpn-zone-packet-path.png)
+
+### Original HTTPS Test Evidence
+
+![Successful HTTPS Test](topology/vpn-https-success.png)
+
+The screenshot documents successful HTTPS connectivity during the original project work.
+
+**Verification Note:** A subsequent attempt to reproduce the VPN connection using the archived Packet Tracer file timed out during ISAKMP negotiation. The original evidence is therefore presented as a historical project result rather than a newly reproduced successful test.
+
+## Project Results
+
+The project combined theoretical cybersecurity concepts with practical implementation, testing and technical troubleshooting.
+
+### Security Controls & Validation Summary
+
+| Security Area | Implementation & Verification | Result |
+|---|---|---|
+| Network Segmentation | VLANs, security zones and restricted network communication | Tested in original project |
+| Firewall & DMZ | HTTPS access permitted and HTTP access restricted in documented tests | Tested in original project |
+| Kali Linux & Nmap | Port scanning before and after UFW configuration | Tested |
+| Ubuntu Hardening | SSH configuration, UFW rules, updates and AppArmor | Configured and reviewed |
+| Windows Security | Defender, firewall, account policies and ransomware protection | Reviewed and documented |
+| Syslog Monitoring | Python and PowerShell analysis of repeated interface failures | Tested |
+| IPsec VPN | VPN connectivity and HTTPS access to Server0 | Original test successful; archived retest failed |
+| MFA & IPS | Security concepts and implementation recommendations | Conceptual only |
+
+### Technical Documentation
+
+Detailed documentation and selected evidence are available in the following directories:
+
+- [Network Security Controls](network-security-controls/)
+- [Security Testing with Kali Linux & Nmap](security-testing/)
+- [Linux & Windows System Hardening](system-hardening/)
+- [Syslog Monitoring & Automation](monitoring/)
+- [Network Topology & VPN Evidence](topology/)
+
+**Verification Note:** Results refer to the original educational project. Not all tests were successfully reproduced using the archived Cisco Packet Tracer configuration.
 
 ## Key Learning Outcomes
 
-This implementation provided practical experience with:
+This project strengthened our practical knowledge in:
 
-- Linux system administration
-- Python socket programming
-- Centralized Syslog collection
-- Automated security event analysis
-- PowerShell scripting
-- Event correlation and duplicate detection
-- Network monitoring and troubleshooting
+- Network infrastructure analysis and risk assessment.
+- Secure network architecture and segmentation.
+- Cisco routing, firewalls and VPN technologies.
+- Linux administration and system hardening.
+- Windows endpoint security.
+- Network security testing with Kali Linux and Nmap.
+- Python-based monitoring and automation.
+- PowerShell scripting and security event analysis.
+- Network troubleshooting and root cause analysis.
+- Technical documentation and team collaboration.
 
-**Project:** BauWert Network Security Lab  
-**Module:** ÜK 184 – Implementing Network Security  
-**Final Grade:** 6.0 / 6.0
+One of the most important lessons was learning to investigate technical problems using measurable evidence rather than relying on assumptions.
+
+The project also demonstrated that network security requires multiple coordinated security controls instead of relying on a single protection mechanism.
+
+## Project Information
+
+| Category | Details |
+|---|---|
+| Project | BauWert – Network Security Lab |
+| Module | ÜK 184 – Implementing Network Security |
+| Training | Swiss Federal VET Diploma (EFZ), Platform Development |
+| Team | Two students |
+| Completion | November 2026 |
+| Status | Completed |
+| Final Grade | **6.0 / 6.0 – Highest Swiss Grade** |
+
+## Limitations & Disclaimer
+
+This repository documents a fictional business environment developed for educational purposes.
+
+All security testing was carried out in controlled laboratory or simulated network environments.
+
+Some security measures, including MFA and selected IPS capabilities, could not be fully implemented within Cisco Packet Tracer and were therefore documented conceptually.
+
+The scripts and network configurations are educational prototypes and should not be considered production-ready without further security review, testing and adaptation.
+
+The original Packet Tracer project file is not included because the archived VPN configuration could not be successfully revalidated.
