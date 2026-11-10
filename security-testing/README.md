@@ -1,59 +1,100 @@
+
 # Network Security Testing – Kali Linux & Nmap
 
 ## Overview
 
-This section documents network security assessments performed in a controlled VMware laboratory environment as part of the BauWert Network Security Lab.
+This section documents network security testing performed in a controlled VMware laboratory environment as part of the BauWert Network Security Lab.
 
-Kali Linux and Nmap were used to analyse network accessibility, identify exposed services, and evaluate the effects of firewall configuration changes on an Ubuntu Server.
+Kali Linux and Nmap were used to examine the network exposure of an Ubuntu Server and verify the effects of UFW firewall configuration.
 
 ## Test Environment
 
 | Component | Purpose |
 |---|---|
 | Kali Linux | Security testing workstation |
-| Nmap | Network and port scanning |
+| Nmap | Network and service scanning |
 | Ubuntu Server | Target system |
 | UFW | Host-based firewall |
 | VMware Workstation | Virtualized laboratory environment |
 
-## Port Scanning and Firewall Validation
+## 1. Initial Network Assessment
 
-We performed Nmap scans before and after applying firewall restrictions to the Ubuntu Server.
+Before enabling the firewall restrictions, an Nmap service scan was performed against the Ubuntu Server.
 
-### Initial Assessment
+Command used:
 
-The initial scans were used to examine reachable services and identify the server's exposed network ports.
+`nmap -sV 192.168.249.129`
 
-### Firewall Hardening
+### Initial Scan Results
 
-We reviewed the Ubuntu Server's firewall configuration and applied restrictions using UFW.
+- Target host was reachable.
+- TCP port 22 (SSH) was open.
+- OpenSSH 9.6p1 was detected.
+- 999 TCP ports were reported as closed.
 
-SSH access was retained for administration.
+### Evidence – Before Firewall Configuration
 
-### Verification
+![Nmap Scan Before UFW](nmap-before-ufw.png)
 
-Additional Nmap scans were performed to compare the server's network exposure before and after the firewall changes.
+## 2. Firewall Hardening
 
-The results showed the impact of firewall filtering while maintaining the required SSH connectivity.
+Ubuntu's Uncomplicated Firewall (UFW) was used to restrict unnecessary incoming network traffic.
 
-## Key Learning Outcomes
+SSH connectivity was retained for administration.
 
-- Network reconnaissance using Nmap
-- Understanding open, closed, and filtered ports
-- Configuring and validating UFW firewall rules
-- Comparing network accessibility before and after security changes
-- Understanding the importance of verifying security controls through practical testing
+The objective was to reduce network exposure without preventing authorized remote access.
+
+## 3. Verification After Firewall Configuration
+
+The Nmap scan was repeated after applying the UFW restrictions.
+
+Command used:
+
+`nmap -sV 192.168.249.129`
+
+### Updated Scan Results
+
+- Target host remained reachable.
+- TCP port 22 (SSH) remained open.
+- 999 TCP ports were reported as filtered.
+- The other scanned ports no longer returned the same closed-port responses as before.
+
+### Evidence – After Firewall Configuration
+
+![Nmap Scan After UFW](nmap-after-ufw.png)
+
+## 4. Before and After Comparison
+
+| Test | Before UFW | After UFW |
+|---|---|---|
+| Host reachable | Yes | Yes |
+| SSH (TCP 22) | Open | Open |
+| Other 999 scanned TCP ports | Closed | Filtered |
+| Administrative SSH access | Available | Available |
+
+The results demonstrate a change in the network responses observed by Nmap after the firewall configuration.
+
+A filtered port does not respond in the same way as a closed port, which can reduce information exposed during network reconnaissance.
+
+## 5. Key Learning Outcomes
+
+- Network reconnaissance using Kali Linux and Nmap
+- Service detection using `nmap -sV`
+- Understanding open, closed and filtered TCP ports
+- Configuring host-based firewall restrictions
+- Maintaining SSH access during firewall hardening
+- Validating configuration changes through repeated testing
 
 ## Limitations
 
-The assessments were conducted exclusively in an authorized, isolated educational laboratory environment.
+The scan covered Nmap's default selection of 1,000 TCP ports rather than every possible port.
 
-The scan results demonstrate observed network behaviour within this environment and do not constitute a complete security assessment.
+The tests were performed in an isolated educational VMware environment. The results do not constitute a complete vulnerability assessment or penetration test.
 
-## Project Information
+---
+
+**Project:** BauWert – Network Security Lab
 
 **Module:** ÜK 184 – Implementing Network Security
-
-**Project:** BauWert Network Security Lab
 
 **Final Grade:** 6.0 / 6.0
